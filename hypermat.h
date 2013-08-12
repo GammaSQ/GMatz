@@ -52,6 +52,34 @@ public:
         delete[] dim_;
     }
 
+    hypermat<con> selection(const hypermat<bool> mat)
+    {
+        if(num_dim_ < mat.num_dim_) throw std::invalid_argument("Matrix has to have same number of dimensions!");
+        int len= 0;
+        int* indizes = new int [interval_.len()];
+        for(int i=0;i<interval_.len();i++)
+        {
+            int work = i;
+            int idx=0;
+            bool test=false;
+            for(int j=0;j<mat.num_dim_;j++)
+            {
+                int tryout=work/dim_[j];
+                if(tryout>mat.dim_[j])
+                {
+                    test=true;
+                    break;
+                }
+                idx += tryout*mat.dim_[j];
+                work -= tryout*dim_[j];
+            }
+            indizes[i]= (mat.interval_[idx])? i : -1;
+        }
+        interdex<con>ind(interval_, interval_.len(), indizes);
+        hypermat<con> ret(num_dim_, dim_, interval_.len(), ind);
+        return ret;
+    }
+
     hypermat<con> selection(const hypermat<int> mat)
         throw (std::invalid_argument)
     {
@@ -78,7 +106,9 @@ public:
             for(int j=0;j<mat.dim_[0];j++){
                 calc /= dim[j];
                 ext=current/calc;
-                index += (mat.interval_[dimconst*j + ext]-1)*calc;
+                int idx = mat.interval_[dimconst*j + ext];
+                if(idx>dim_[j]) throw std::invalid_argument("This element is out of reach!");
+                index += (idx-1)*calc;
                 current -= ext*calc;
             }
             indizes[i]=index;

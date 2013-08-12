@@ -42,7 +42,6 @@ int testadd(hypermat<contentType> mata, hypermat<contentType> matb){
     hypermat<contentType> ret(mata);
     for(int i=0;i<mata.interval_.len();i++){
         ret.interval_[i]=mata.interval_[i]+matb.interval_[i];
-        
         assert(ret.interval_[i]==jeck.interval_[i]);
     }
     assert(ret==(mata+matb));
@@ -78,7 +77,7 @@ int main(){
     int arg[2]={4,5};
     double arg2[20]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
     int arg3[2]={2,6};
-    int arg4[12]={5,1,2,3,4,0,4,3,2,1,0,0};
+    int arg4[12]={1,2,3,4,0,0,5,4,3,2,1,0};
     hypermat<int> argument(2,arg3,12,arg4);
     hypermat<double> selection(2,arg,20,arg2);
     hypermat<double> ri(selection.selection(argument));// = run;

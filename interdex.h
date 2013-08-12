@@ -28,10 +28,10 @@ public:
     {
         copy_=false;
         value_num_=value_num;
-        values_ = new unk[value_num];
+        values_ = new unk[value_num+1];
         index_num_=0;
         indizes_ = new int [0];
-        std::copy(values, (values+value_num), values_);
+        std::copy(values, (values+value_num), values_+1);
     }
 
     interdex(int value_num, const unk* values, int index_num, const int* indizes)
@@ -39,8 +39,8 @@ public:
         copy_=false;
         value_num_ = value_num;
         index_num_ = index_num;
-        values_ = new unk[value_num];
-        std::copy(values, (values+value_num), values_);
+        values_ = new unk[value_num+1];
+        std::copy(values, (values+value_num), values_+1);
         indizes_ = new int [index_num];
         std::copy(indizes, (indizes+index_num), indizes_);
     }
@@ -56,8 +56,8 @@ public:
             values_=idx.values_;
         }else{
             copy_=false;
-            values_=new unk [value_num_];
-            std::copy(idx.values_, (idx.values_+value_num_), values_);
+            values_=new unk [value_num_+1];
+            std::copy(idx.values_, (idx.values_+value_num_+1), values_);
         }
     }
 
@@ -143,15 +143,10 @@ public:
         int compair= (index_num_==0)? value_num_ : index_num_;
         if(idx>compair) throw std::invalid_argument("This index is outside of scope!");
         if(index_num_>0){
-            return(values_[indizes_[idx]]);
+            if(indizes_[idx]==-1)values_[0]=0;
+            return(values_[indizes_[idx]+1]);
         } else {
-            return(values_[idx]);
+            return(values_[idx+1]);
         }
-    }
-
-    int entrys() const
-    {
-        int ret = (index_num_==0)? value_num_ : index_num_ ;
-        return ret;
     }
 };
