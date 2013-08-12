@@ -1,5 +1,0 @@
-
-SOURCES = test.cpp
-
-hypertest: $(SOURCES) hypertest
-	g++ -g -o hypertest $< -pedantic -Wall
